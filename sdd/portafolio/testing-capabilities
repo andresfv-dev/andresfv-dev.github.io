@@ -1,0 +1,39 @@
+project: portafolio
+stack:
+  runtime:
+    node: "22" # from .github/workflows/deploy.yml
+  bundler:
+    name: vite
+    version: "^8.0.12" # from package.json
+  ui:
+    framework: react
+    version: "^19.2.6" # from package.json
+  styling:
+    framework: tailwindcss
+    version: "^3.4.17" # from package.json
+  language:
+    type: javascript
+    module: esm
+commands:
+  install: "npm ci" # CI
+  dev: "npm run dev"
+  build: "npm run build"
+  preview: "npm run preview"
+  lint: "npm run lint"
+  test: null
+quality:
+  linter:
+    name: eslint
+    command: "npm run lint"
+    config: "eslint.config.js"
+  formatter: null
+  typecheck: null
+testing:
+  runner: null
+  unit: false
+  integration: false
+  e2e: false
+  coverage: null
+strict_tdd: false
+notes:
+  - "No test runner configured in package.json; strict_tdd disabled until one is added (Vitest/Jest/etc)."

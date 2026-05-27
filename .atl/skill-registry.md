@@ -8,7 +8,6 @@ Last updated: 2026-05-27
 
 - C:\Users\serve\.config\opencode\skills
 - C:\Users\serve\.gemini\skills
-- C:\Users\serve\.gemini\antigravity\skills
 - C:\Users\serve\.cursor\skills
 - C:\Users\serve\.copilot\skills
 

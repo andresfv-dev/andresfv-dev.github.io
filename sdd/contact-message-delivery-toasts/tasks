@@ -1,0 +1,48 @@
+# Tasks: Contact Message Delivery Toasts
+
+Assumption (spec/design missing): This repo currently opens a Gmail compose window on contact form submit; “delivery toasts” means showing user-facing toast notifications for (a) attempting to open the compose window, (b) popup blocked / failed to open, and (c) form validation missing fields. Replace assumptions once `sdd/contact-message-delivery-toasts/spec` is available.
+
+## Review Workload Forecast
+
+| Field | Value |
+|-------|-------|
+| Estimated changed lines | 150-280 |
+| 400-line budget risk | Low |
+| Review budget lines | 800 |
+| Chained PRs recommended | No |
+| Suggested split | Single PR |
+| Delivery strategy | single-pr-default |
+| Chain strategy | pending |
+
+Decision needed before apply: No
+Chained PRs recommended: No
+Chain strategy: pending
+400-line budget risk: Low
+
+### Suggested Work Units
+
+| Unit | Goal | Likely PR | Notes |
+|------|------|-----------|-------|
+| 1 | Add toast system and wire contact submit | PR 1 | Single PR; includes manual verification |
+
+## Phase 1: Foundation (Toast System)
+
+- [ ] 1.1 Create `src/hooks/useToast.js` exposing `pushToast({ tone, title, message, durationMs })` and `dismissToast(id)`.
+- [ ] 1.2 Create `src/components/ToastHost.jsx` rendering a fixed-position stack with `role="status"` / `aria-live="polite"`.
+- [ ] 1.3 Add toast styles in `src/index.css` (or Tailwind utility classes in `src/components/ToastHost.jsx`) consistent with existing palette vars.
+
+## Phase 2: Core Implementation (Contact Submit Feedback)
+
+- [ ] 2.1 Update `src/App.jsx` `onContactSubmit` to validate `contactMessage` and `contactEmail` (or required fields per spec) and toast on invalid.
+- [ ] 2.2 Update `src/App.jsx` `onContactSubmit` to detect popup blocked (`window.open()` returns `null`) and toast an actionable error.
+- [ ] 2.3 On success path, toast “Opening Gmail compose…” (or spec copy) and optionally clear form state (`setContactName('')`, etc.).
+
+## Phase 3: Integration / Wiring
+
+- [ ] 3.1 Render `ToastHost` at app root in `src/App.jsx` so it overlays all sections without layout shift.
+- [ ] 3.2 Ensure keyboard/accessibility: toast close button is focusable and respects `prefers-reduced-motion` (no mandatory animations).
+
+## Phase 4: Verification
+
+- [ ] 4.1 Manual: `npm run dev` then submit contact form with valid data; verify toast shows and Gmail tab opens.
+- [ ] 4.2 Manual: Simulate popup blocked (browser setting) and verify error toast + suggested fallback (`mailto:` link or copy text) works.
