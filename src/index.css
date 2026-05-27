@@ -3,9 +3,92 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --c-base: #0e0e11;
+    --c-surface: #131316;
+    --c-border: #3e4a40;
+    --c-text: #e4e1e5;
+    --c-muted: #bdcabe;
+    --c-accent: #86efac;
+    --c-secondary: #ffb3b2;
+  }
+
   body {
     @apply font-mono antialiased;
-    background: #09090b;
-    color: #e4e4e7;
+    background: #000;
+    color: var(--c-text);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@layer components {
+  .focus-ring {
+    @apply outline-none focus-visible:ring-1 focus-visible:ring-[var(--c-accent)] focus-visible:ring-offset-2;
+    --tw-ring-offset-color: var(--c-surface);
+  }
+
+  .hero-shell .status-dot {
+    animation: pulse-dot 1.4s ease-in-out infinite;
+  }
+
+  .hero-shell .typing-cursor {
+    animation: blink-cursor 900ms steps(1, end) infinite;
+  }
+}
+
+@layer utilities {
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 480ms ease-out both;
+  }
+
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      opacity: 0.35;
+    }
+
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes blink-cursor {
+    0%,
+    45% {
+      opacity: 1;
+    }
+
+    46%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-shell .status-dot,
+    .hero-shell .typing-cursor {
+      animation: none;
+    }
   }
 }
