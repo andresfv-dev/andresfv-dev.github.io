@@ -419,8 +419,8 @@ function App() {
               id="hero"
               className="hero-shell relative scroll-mt-24 space-y-7 overflow-hidden rounded-[24px] border border-[var(--c-border)] bg-[linear-gradient(180deg,rgba(14,14,17,0.96),rgba(10,10,12,0.98))] p-6 motion-safe:animate-fade-in md:min-h-[calc(100dvh-8rem)] md:snap-start md:p-10"
             >
-              <p className="absolute left-6 top-6 z-10 inline-flex items-center gap-3 text-base text-[#fbbf24] md:text-lg">
-                <span className="status-dot inline-block h-2.5 w-2.5 rounded-full bg-[#fbbf24]" aria-hidden="true" />
+              <p className="absolute left-6 top-6 z-10 inline-flex items-center gap-3 text-base text-[var(--c-muted)] md:text-lg">
+                <span className="status-dot inline-block h-2.5 w-2.5 rounded-full bg-[var(--c-accent)]" aria-hidden="true" />
                 [ SYSTEM_STATUS: {currentSection.toUpperCase()} ]
               </p>
 
@@ -484,8 +484,8 @@ function App() {
             </section>
 
             <section id="experience" className="scroll-mt-24 space-y-6 rounded-[24px] border border-[var(--c-border)] bg-[rgba(14,14,17,0.9)] p-6 motion-safe:animate-fade-in motion-safe:[animation-delay:120ms] md:min-h-[calc(100dvh-8rem)] md:snap-start md:p-10">
-              <p className="inline-flex items-center gap-3 text-base text-[#fbbf24] md:text-lg">
-                <span className="status-dot inline-block h-2.5 w-2.5 rounded-full bg-[#fbbf24]" aria-hidden="true" />
+              <p className="inline-flex items-center gap-3 text-base text-[var(--c-muted)] md:text-lg">
+                <span className="status-dot inline-block h-2.5 w-2.5 rounded-full bg-[var(--c-accent)]" aria-hidden="true" />
                 [ SYSTEM_STATUS: EXPERIENCIA ]
               </p>
               <div className="space-y-4">
@@ -505,8 +505,8 @@ function App() {
             </section>
 
             <section id="projects" className="scroll-mt-24 space-y-6 rounded-[24px] border border-[var(--c-border)] bg-[rgba(14,14,17,0.9)] p-6 motion-safe:animate-fade-in motion-safe:[animation-delay:180ms] md:min-h-[calc(100dvh-8rem)] md:snap-start md:p-10">
-              <p className="inline-flex items-center gap-3 text-base text-[#fbbf24] md:text-lg">
-                <span className="status-dot inline-block h-2.5 w-2.5 rounded-full bg-[#fbbf24]" aria-hidden="true" />
+              <p className="inline-flex items-center gap-3 text-base text-[var(--c-muted)] md:text-lg">
+                <span className="status-dot inline-block h-2.5 w-2.5 rounded-full bg-[var(--c-accent)]" aria-hidden="true" />
                 [ SYSTEM_STATUS: PROYECTOS ]
               </p>
               <div className="grid gap-4 md:grid-cols-2">
@@ -535,8 +535,8 @@ function App() {
             </section>
 
             <section id="tools" className="scroll-mt-24 space-y-6 rounded-[24px] border border-[var(--c-border)] bg-[rgba(14,14,17,0.9)] p-6 motion-safe:animate-fade-in motion-safe:[animation-delay:220ms] md:min-h-[calc(100dvh-8rem)] md:snap-start md:p-10">
-              <p className="inline-flex items-center gap-3 text-base text-[#fbbf24] md:text-lg">
-                <span className="status-dot inline-block h-2.5 w-2.5 rounded-full bg-[#fbbf24]" aria-hidden="true" />
+              <p className="inline-flex items-center gap-3 text-base text-[var(--c-muted)] md:text-lg">
+                <span className="status-dot inline-block h-2.5 w-2.5 rounded-full bg-[var(--c-accent)]" aria-hidden="true" />
                 [ SYSTEM_STATUS: HERRAMIENTAS ]
               </p>
 
@@ -610,8 +610,8 @@ function App() {
                 </div>
 
                 <div className="pt-6 md:pt-10">
-                  <p className="inline-flex items-center gap-3 text-base text-[#fbbf24] md:text-lg">
-                    <span className="status-dot inline-block h-2.5 w-2.5 rounded-full bg-[#fbbf24]" aria-hidden="true" />
+                  <p className="inline-flex items-center gap-3 text-base text-[var(--c-muted)] md:text-lg">
+                    <span className="status-dot inline-block h-2.5 w-2.5 rounded-full bg-[var(--c-accent)]" aria-hidden="true" />
                     [ STATUS: HE_TRABAJADO_CON ]
                   </p>
                 </div>
@@ -647,8 +647,8 @@ function App() {
             </section>
 
             <section id="contact" className="scroll-mt-24 space-y-6 rounded-[24px] border border-[var(--c-border)] bg-[rgba(14,14,17,0.9)] p-6 md:min-h-[calc(100dvh-8rem)] md:snap-start md:p-10">
-              <p className="inline-flex items-center gap-3 text-base text-[#fbbf24] md:text-lg">
-                <span className="status-dot inline-block h-2.5 w-2.5 rounded-full bg-[#fbbf24]" aria-hidden="true" />
+              <p className="inline-flex items-center gap-3 text-base text-[var(--c-muted)] md:text-lg">
+                <span className="status-dot inline-block h-2.5 w-2.5 rounded-full bg-[var(--c-accent)]" aria-hidden="true" />
                 [ SYSTEM_STATUS: CONTACTO ]
               </p>
 
