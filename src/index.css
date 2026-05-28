@@ -85,9 +85,26 @@
     }
   }
 
+  @keyframes slide-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .animate-slide-in-right {
+    animation: slide-in-right 300ms ease-out both;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .hero-shell .status-dot,
-    .hero-shell .typing-cursor {
+    .hero-shell .typing-cursor,
+    .animate-slide-in-right {
       animation: none;
     }
   }

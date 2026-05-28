@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import {
   ArrowUpRight,
+  Menu,
   Send,
   Terminal,
+  X,
 } from 'lucide-react'
 
 function App() {
@@ -15,8 +17,12 @@ function App() {
   const [contactEmail, setContactEmail] = useState('')
   const [contactMessage, setContactMessage] = useState('')
   const [isSending, setIsSending] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [toast, setToast] = useState(null)
+  const cvUrl = ''
   const typingDoneRef = useRef(false)
+  const mobileNavRef = useRef(null)
+  const matrixCanvasRef = useRef(null)
 
   useEffect(() => {
     const sections = [
@@ -78,6 +84,63 @@ function App() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useEffect(() => {
+    if (mobileMenuOpen && mobileNavRef.current) {
+      const firstLink = mobileNavRef.current.querySelector('a')
+      if (firstLink) firstLink.focus()
+    }
+  }, [mobileMenuOpen])
+
+  useEffect(() => {
+    const canvas = matrixCanvasRef.current
+    if (!canvas) return
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReduced) return
+
+    const ctx = canvas.getContext('2d')
+    let animationId
+
+    const resize = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+    resize()
+    window.addEventListener('resize', resize)
+
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$%@#&*()_+-=[]{}|;:,.<>/?'
+    const fontSize = 14
+    const columns = Math.floor(canvas.width / fontSize)
+    const drops = Array.from({ length: columns }, () => Math.random() * -100)
+
+    const draw = () => {
+      ctx.fillStyle = 'rgba(5, 5, 6, 0.05)'
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+      ctx.fillStyle = '#86efac'
+      ctx.font = `${fontSize}px 'Courier New', monospace`
+
+      for (let i = 0; i < drops.length; i++) {
+        const char = chars[Math.floor(Math.random() * chars.length)]
+        ctx.fillText(char, i * fontSize, drops[i] * fontSize)
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0
+        }
+        drops[i]++
+      }
+
+      animationId = requestAnimationFrame(draw)
+    }
+
+    draw()
+
+    return () => {
+      cancelAnimationFrame(animationId)
+      window.removeEventListener('resize', resize)
+    }
+  }, [])
+
   const experiences = [
     {
       role: 'Technical Product Manager',
@@ -101,12 +164,14 @@ function App() {
       year: '2023',
       description: 'Plataforma core para monitoreo automatizado y orquestacion de despliegues.',
       tags: ['AWS', 'DOCKER'],
+      sourceUrl: '',
     },
     {
       name: 'Dev Station',
       year: '2022',
       description: 'Entorno colaborativo para revisiones de codigo en tiempo real.',
       tags: ['REACT', 'NODE'],
+      sourceUrl: '',
     },
   ]
 
@@ -159,7 +224,15 @@ function App() {
     })
       .then(async (response) => {
         if (!response.ok) {
-          throw new Error('send_failed')
+          let errorMessage = 'No se pudo enviar. Probá de nuevo.'
+          try {
+            const errorBody = await response.json()
+            if (errorBody.message) errorMessage = errorBody.message
+            else if (errorBody.error) errorMessage = errorBody.error
+          } catch {
+            // Non-JSON response — use fallback message
+          }
+          throw new Error(errorMessage)
         }
 
         setContactName('')
@@ -167,8 +240,8 @@ function App() {
         setContactMessage('')
         setToast({ type: 'success', message: 'Mensaje enviado correctamente.' })
       })
-      .catch(() => {
-        setToast({ type: 'error', message: 'No se pudo enviar. Probá de nuevo.' })
+      .catch((err) => {
+        setToast({ type: 'error', message: err.message })
       })
       .finally(() => {
         setIsSending(false)
@@ -230,7 +303,30 @@ function App() {
   }, [toast])
 
   return (
-    <div className="min-h-dvh bg-[radial-gradient(circle_at_top,_rgba(134,239,172,0.12),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(255,179,178,0.12),_transparent_24%),#050506] px-4 py-6 md:px-6 md:py-10">
+    <>
+      <canvas
+        ref={matrixCanvasRef}
+        className="pointer-events-none fixed inset-0 z-0 opacity-[0.06]"
+        aria-hidden="true"
+      />
+
+      <div className="pointer-events-none fixed inset-y-0 left-0 z-10 hidden items-center justify-center md:flex" aria-hidden="true">
+        <div className="flex h-3/5 flex-col items-center gap-0.5">
+          <span className="block text-[10px] font-mono leading-none text-[#86efac] opacity-50">┌</span>
+          <div className="flex-1 w-px bg-gradient-to-b from-[#86efac]/80 via-[#86efac]/40 to-[#86efac]/80" />
+          <span className="block text-[10px] font-mono leading-none text-[#86efac] opacity-50">└</span>
+        </div>
+      </div>
+
+      <div className="pointer-events-none fixed inset-y-0 right-0 z-10 hidden items-center justify-center md:flex" aria-hidden="true">
+        <div className="flex h-3/5 flex-col items-center gap-0.5">
+          <span className="block text-[10px] font-mono leading-none text-[#86efac] opacity-50">┐</span>
+          <div className="flex-1 w-px bg-gradient-to-b from-[#86efac]/80 via-[#86efac]/40 to-[#86efac]/80" />
+          <span className="block text-[10px] font-mono leading-none text-[#86efac] opacity-50">┘</span>
+        </div>
+      </div>
+
+      <div className="min-h-dvh bg-[radial-gradient(circle_at_top,_rgba(134,239,172,0.12),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(255,179,178,0.12),_transparent_24%),#050506] px-4 py-6 md:px-6 md:py-10">
       <div className="mx-auto w-full max-w-6xl">
         <div className="relative rounded-[28px] border border-[var(--c-border)] bg-[linear-gradient(180deg,rgba(19,19,22,0.97),rgba(14,14,17,0.98))] shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
           <header
@@ -249,7 +345,53 @@ function App() {
               <a href="#projects" className="focus-ring transition-colors hover:text-[var(--c-accent)]">[ PROYECTOS ]</a>
               <a href="#contact" className="focus-ring transition-colors hover:text-[var(--c-accent)]">[ CONTACTO ]</a>
             </nav>
+            <button
+              type="button"
+              className="focus-ring md:hidden"
+              aria-label={mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+              aria-expanded={mobileMenuOpen}
+              onClick={() => setMobileMenuOpen((prev) => !prev)}
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5 text-[var(--c-text)]" /> : <Menu className="h-5 w-5 text-[var(--c-text)]" />}
+            </button>
           </header>
+
+          {mobileMenuOpen && (
+            <>
+              <button
+                type="button"
+                aria-label="Cerrar menú móvil"
+                className="fixed inset-0 z-30 bg-black/60 md:hidden"
+                onClick={() => setMobileMenuOpen(false)}
+              />
+
+              <nav
+                ref={mobileNavRef}
+                className="fixed inset-y-0 right-0 z-40 flex w-72 max-w-[85vw] flex-col border-l border-[var(--c-border)] bg-[rgba(8,8,10,0.96)] px-5 py-6 backdrop-blur-xl md:hidden"
+                aria-label="Navegación móvil"
+              >
+                <div className="mb-6 flex items-center justify-between">
+                  <span className="text-sm font-semibold tracking-[0.16em] text-[var(--c-text)]">[ MENÚ ]</span>
+                  <button
+                    type="button"
+                    className="focus-ring"
+                    aria-label="Cerrar menú"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <X className="h-5 w-5 text-[var(--c-text)]" />
+                  </button>
+                </div>
+
+                <div className="flex animate-slide-in-right flex-col gap-2">
+                  <a href="#hero" onClick={() => setMobileMenuOpen(false)} className="focus-ring rounded-lg px-4 py-3 text-sm text-[var(--c-muted)] transition-colors hover:bg-[rgba(255,255,255,0.03)] hover:text-[var(--c-accent)]">[ INICIO ]</a>
+                  <a href="#about" onClick={() => setMobileMenuOpen(false)} className="focus-ring rounded-lg px-4 py-3 text-sm text-[var(--c-muted)] transition-colors hover:bg-[rgba(255,255,255,0.03)] hover:text-[var(--c-accent)]">[ SOBRE MÍ ]</a>
+                  <a href="#experience" onClick={() => setMobileMenuOpen(false)} className="focus-ring rounded-lg px-4 py-3 text-sm text-[var(--c-muted)] transition-colors hover:bg-[rgba(255,255,255,0.03)] hover:text-[var(--c-accent)]">[ EXPERIENCIA ]</a>
+                  <a href="#projects" onClick={() => setMobileMenuOpen(false)} className="focus-ring rounded-lg px-4 py-3 text-sm text-[var(--c-muted)] transition-colors hover:bg-[rgba(255,255,255,0.03)] hover:text-[var(--c-accent)]">[ PROYECTOS ]</a>
+                  <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="focus-ring rounded-lg px-4 py-3 text-sm text-[var(--c-muted)] transition-colors hover:bg-[rgba(255,255,255,0.03)] hover:text-[var(--c-accent)]">[ CONTACTO ]</a>
+                </div>
+              </nav>
+            </>
+          )}
 
           <main className="space-y-10 px-5 pb-16 pt-8 md:snap-y md:snap-mandatory md:space-y-12 md:px-8 md:pt-10">
             <section
@@ -281,12 +423,16 @@ function App() {
                   >
                     [ CONTRATAME ↗ ]
                   </a>
-                  <a
-                    href="#"
-                    className="focus-ring inline-flex cursor-pointer items-center gap-2 border border-[var(--c-border)] px-6 py-3 text-base font-semibold text-[var(--c-text)] transition-colors hover:border-[var(--c-accent)] hover:text-[var(--c-accent)]"
-                  >
-                    [ LEER MI CV ]
-                  </a>
+                  {cvUrl && (
+                    <a
+                      href={cvUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="focus-ring inline-flex cursor-pointer items-center gap-2 border border-[var(--c-border)] px-6 py-3 text-base font-semibold text-[var(--c-text)] transition-colors hover:border-[var(--c-accent)] hover:text-[var(--c-accent)]"
+                    >
+                      [ LEER MI CV ]
+                    </a>
+                  )}
                 </div>
               </div>
             </section>
@@ -298,17 +444,15 @@ function App() {
               </p>
               <div className="space-y-4">
                 <div className="border border-[var(--c-border)] bg-[var(--c-base)] p-5 text-sm leading-relaxed text-[var(--c-text)] md:p-6">
-                  <p className="mb-2 text-xs text-[var(--c-muted)]">
-                    <span className="text-[var(--c-accent)]">root@avm_system:~$</span> cat description.txt
-                  </p>
-                  Especializado en construir arquitecturas digitales de alta precision con codigo limpio, interfaces minimalistas y enfoque en escalabilidad.
-                </div>
-                <div className="border border-[var(--c-border)] bg-[var(--c-base)] p-5 text-sm leading-relaxed text-[var(--c-text)] md:p-6">
-                  <p className="mb-2 text-xs text-[var(--c-muted)]">
+                  <p className="mb-4 text-xs text-[var(--c-muted)]">
                     <span className="text-[var(--c-accent)]">root@avm_system:~$</span> cat sobre_mi.txt
                   </p>
-                  Desarrollo productos web robustos con React y Node.js, priorizando rendimiento real, mantenibilidad y experiencia de usuario.
-                  <span className="ml-1 inline-block h-4 w-2 animate-pulse bg-[var(--c-accent)] align-middle motion-reduce:animate-none" />
+                  <p className="leading-7">
+                    Soy estudiante de Tecnología en Desarrollo de Software en la Universidad del Valle y me desempeño como desarrollador enfocado en la lógica backend y el liderazgo técnico de proyectos. Mi prioridad no es solo escribir código, sino garantizar que la arquitectura del sistema sea estable y que las herramientas construidas resuelvan problemas reales de forma directa.
+                  </p>
+                  <p className="mt-5 border-t border-[var(--c-border)] pt-5 leading-7 text-[var(--c-muted)]">
+                    Actualmente lidero un equipo multidisciplinario de 5 personas en el desarrollo y despliegue de plataformas web, encargándome de la definición de requerimientos técnicos y la organización de tareas para asegurar entregas que aporten valor al cliente. Me interesa el trabajo estructurado, el rendimiento real de las aplicaciones y el desarrollo de software mantenible a largo plazo.
+                  </p>
                 </div>
               </div>
             </section>
@@ -354,9 +498,11 @@ function App() {
                         </span>
                       ))}
                     </div>
-                    <a href="#" className="focus-ring inline-flex items-center gap-2 text-xs text-[var(--c-accent)] transition-opacity hover:opacity-90">
-                      VIEW_SOURCE <ArrowUpRight className="h-4 w-4" />
-                    </a>
+                    {project.sourceUrl && (
+                      <a href={project.sourceUrl} target="_blank" rel="noreferrer" className="focus-ring inline-flex items-center gap-2 text-xs text-[var(--c-accent)] transition-opacity hover:opacity-90">
+                        VIEW_SOURCE <ArrowUpRight className="h-4 w-4" />
+                      </a>
+                    )}
                   </article>
                 ))}
               </div>
@@ -508,7 +654,7 @@ function App() {
                         }
                         aria-label={label}
                       >
-                        <img src={logoSrc} alt={`${label} logo`} className="h-5 w-5 object-contain" loading="lazy" />
+                        <img src={logoSrc} alt="" className="h-5 w-5 object-contain" loading="lazy" />
                       </a>
                     ))}
                   </div>
@@ -516,8 +662,9 @@ function App() {
 
                 <form onSubmit={onContactSubmit} className="space-y-4 rounded-[22px] border border-[var(--c-border)] bg-[rgba(19,19,22,0.72)] p-5 pt-10 md:p-6 md:pt-14">
                   <div className="bg-[var(--c-surface)] p-4">
-                    <label className="mb-2 block text-xs text-[var(--c-muted)]">[ NOMBRE ]</label>
+                    <label htmlFor="contact-name" className="mb-2 block text-xs text-[var(--c-muted)]">[ NOMBRE ]</label>
                     <input
+                      id="contact-name"
                       value={contactName}
                       onChange={(e) => setContactName(e.target.value)}
                       className="w-full border border-[var(--c-border)] bg-[var(--c-base)] px-3 py-2 text-sm text-[var(--c-text)] outline-none focus:border-[var(--c-accent)]"
@@ -525,8 +672,9 @@ function App() {
                     />
                   </div>
                   <div className="bg-[var(--c-surface)] p-4">
-                    <label className="mb-2 block text-xs text-[var(--c-muted)]">[ EMAIL ]</label>
+                    <label htmlFor="contact-email" className="mb-2 block text-xs text-[var(--c-muted)]">[ EMAIL ]</label>
                     <input
+                      id="contact-email"
                       type="email"
                       value={contactEmail}
                       onChange={(e) => setContactEmail(e.target.value)}
@@ -535,8 +683,9 @@ function App() {
                     />
                   </div>
                   <div className="bg-[var(--c-surface)] p-4">
-                    <label className="mb-2 block text-xs text-[var(--c-muted)]">[ MENSAJE ]</label>
+                    <label htmlFor="contact-message" className="mb-2 block text-xs text-[var(--c-muted)]">[ MENSAJE ]</label>
                     <textarea
+                      id="contact-message"
                       value={contactMessage}
                       onChange={(e) => setContactMessage(e.target.value)}
                       rows={5}
@@ -584,6 +733,7 @@ function App() {
         </div>
       </div>
     </div>
+    </>
   )
 }
 
