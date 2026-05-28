@@ -111,6 +111,9 @@ function App() {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$%@#&*()_+-=[]{}|;:,.<>/?'
     const fontSize = 14
     const columns = Math.floor(canvas.width / fontSize)
+    const sideRatio = 0.12
+    const leftEnd = Math.floor(columns * sideRatio)
+    const rightStart = columns - Math.floor(columns * sideRatio)
     const drops = Array.from({ length: columns }, () => Math.random() * -100)
 
     const draw = () => {
@@ -121,6 +124,8 @@ function App() {
       ctx.font = `${fontSize}px 'Courier New', monospace`
 
       for (let i = 0; i < drops.length; i++) {
+        if (i > leftEnd && i < rightStart) continue
+
         const char = chars[Math.floor(Math.random() * chars.length)]
         ctx.fillText(char, i * fontSize, drops[i] * fontSize)
 
@@ -306,7 +311,7 @@ function App() {
     <>
       <canvas
         ref={matrixCanvasRef}
-        className="pointer-events-none fixed inset-0 z-0 opacity-[0.06]"
+        className="pointer-events-none fixed inset-0 z-0 opacity-[0.15]"
         aria-hidden="true"
       />
 
