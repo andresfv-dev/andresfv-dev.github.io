@@ -656,7 +656,7 @@ function App() {
                 <div className="flex flex-col items-center justify-center rounded-[22px] border border-[var(--c-border)] bg-[rgba(19,19,22,0.72)] px-6 py-10 text-center md:py-14">
                   <div className="flex flex-col items-center gap-5 pt-4 md:pt-6">
                     <div className="grid h-44 w-44 place-items-center rounded-full border border-[var(--c-border)] bg-[radial-gradient(circle_at_top,_rgba(134,239,172,0.18),_rgba(19,19,22,0.95)_70%)]">
-                      <span className="text-xs text-[var(--c-muted)]">[ FOTO ]</span>
+                      <span className="max-w-[10ch] text-center text-sm font-bold leading-tight tracking-[0.12em] text-[var(--c-accent)]">ANDRES FELIPE VELASQUEZ MORENO</span>
                     </div>
 
                     <div className="space-y-3">
