@@ -660,7 +660,6 @@ function App() {
                     </div>
 
                     <div className="space-y-3">
-                      <p className="text-base font-semibold tracking-[0.16em] text-[var(--c-text)]">Andres Felipe Velasquez Moreno</p>
                       <p className="mx-auto max-w-md text-sm leading-relaxed text-[var(--c-muted)]">
                         Si querés colaborar o hablar sobre arquitectura y producto, mis canales están abiertos.
                       </p>
