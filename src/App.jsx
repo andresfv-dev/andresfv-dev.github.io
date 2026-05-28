@@ -19,6 +19,7 @@ function App() {
   const [isSending, setIsSending] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [toast, setToast] = useState(null)
+  const [mousePos, setMousePos] = useState({ x: -999, y: -999 })
   const cvUrl = ''
   const typingDoneRef = useRef(false)
   const mobileNavRef = useRef(null)
@@ -146,20 +147,27 @@ function App() {
     }
   }, [])
 
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const onMove = (e) => setMousePos({ x: e.clientX, y: e.clientY })
+    const onLeave = () => setMousePos({ x: -999, y: -999 })
+
+    window.addEventListener('mousemove', onMove, { passive: true })
+    window.addEventListener('mouseleave', onLeave, { passive: true })
+    return () => {
+      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mouseleave', onLeave)
+    }
+  }, [])
+
   const experiences = [
     {
-      role: 'Technical Product Manager',
+      role: 'Gerente de Producto Técnico',
       company: 'FUNDACIÓN GUARDIANES DEL CORAZÓN',
       period: 'MAYO 2026 - PRESENTE',
       description:
         'Lidero un equipo multidisciplinario de 5 personas en el ciclo completo de desarrollo y despliegue de la plataforma web institucional. Defino los requerimientos de la página web según las necesidades de la fundación y distribuyo las tareas del equipo para asegurar entregas a tiempo.',
-    },
-    {
-      role: 'Full Stack Web Developer',
-      company: 'TECH_LABS_INC',
-      period: '2021 - 2023',
-      description:
-        'Desarrollo de interfaces reactivas y APIs robustas para plataformas cloud-native con despliegues automatizados.',
     },
   ]
 
@@ -331,6 +339,14 @@ function App() {
         </div>
       </div>
 
+      <div
+        className="pointer-events-none fixed inset-0 z-[1] opacity-30 transition-opacity duration-500"
+        aria-hidden="true"
+        style={{
+          background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(134,239,172,0.3), transparent 50%)`,
+        }}
+      />
+
       <div className="min-h-dvh bg-[radial-gradient(circle_at_top,_rgba(134,239,172,0.12),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(255,179,178,0.12),_transparent_24%),#050506] px-4 py-6 md:px-6 md:py-10">
       <div className="mx-auto w-full max-w-6xl">
         <div className="relative rounded-[28px] border border-[var(--c-border)] bg-[linear-gradient(180deg,rgba(19,19,22,0.97),rgba(14,14,17,0.98))] shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
@@ -412,6 +428,11 @@ function App() {
                 <h1 className="max-w-4xl text-balance text-3xl font-bold leading-tight text-[var(--c-text)] md:text-5xl">
                   Bienvenido a mi portafolio, soy <span className="text-[var(--c-accent)]">Andres Felipe Velasquez Moreno</span>
                 </h1>
+
+                  <p className="inline-flex items-center gap-3 rounded-full border border-[#86efac]/30 bg-[rgba(134,239,172,0.06)] px-5 py-2 text-sm font-semibold tracking-[0.22em] text-[#86efac] shadow-[0_0_24px_rgba(134,239,172,0.15)] md:text-base">
+                    <span className="inline-block h-2 w-2 rounded-full bg-[#86efac] shadow-[0_0_8px_rgba(134,239,172,0.6)]" />
+                    [ FULL STACK DEVELOPER ]
+                  </p>
 
                 <div className="w-full max-w-3xl border border-[var(--c-border)] bg-[#09090b]/75 p-5 text-left text-sm leading-relaxed text-[var(--c-text)] backdrop-blur-[1px] md:p-6">
                   <p className="mb-2 text-xs text-[var(--c-muted)]">
