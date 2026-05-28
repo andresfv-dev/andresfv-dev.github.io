@@ -541,7 +541,7 @@ function App() {
               </p>
 
               <div className="space-y-8 md:space-y-10">
-                <div className="flex flex-col gap-3 rounded-[20px] border border-[var(--c-border)] bg-[rgba(19,19,22,0.72)] p-4 md:flex-row md:items-center md:justify-between md:p-5">
+                <div className="flex flex-col gap-3 px-1 md:flex-row md:items-center md:justify-between md:px-0">
                   <span className="text-xs font-semibold tracking-[0.2em] text-[var(--c-muted)] md:text-sm">Resaltar tecnología</span>
                   <div className="flex flex-wrap items-center gap-3">
                     {highlightOptions.map((option) => (
@@ -610,8 +610,8 @@ function App() {
                 </div>
 
                 <div className="pt-6 md:pt-10">
-                  <p className="inline-flex items-center gap-3 text-base text-[var(--c-muted)] md:text-lg">
-                    <span className="status-dot inline-block h-2.5 w-2.5 rounded-full bg-[var(--c-accent)]" aria-hidden="true" />
+                  <p className="inline-flex items-center gap-3 text-base text-[#fbbf24] md:text-lg">
+                    <span className="status-dot inline-block h-2.5 w-2.5 rounded-full bg-[#fbbf24]" aria-hidden="true" />
                     [ STATUS: HE_TRABAJADO_CON ]
                   </p>
                 </div>
